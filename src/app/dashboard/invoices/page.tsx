@@ -1,14 +1,7 @@
 // "use client"
 
-import { getAllCars } from "@/app/api/automobiles/route";
-import { createInvoice, fetchFilteredInvoices, getInv } from "@/app/api/invoices/route";
-import AutoItem from "@/components/automobiles/auto-item";
-import DefaultButton from "@/components/defualt-button";
 import Input from "@/components/input";
 import InvoicesTable from "@/components/invoices/invoices-table";
-import ModalContainer from "@/components/modal-container";
-import Select from "@/components/select";
-import { DeviceTabletIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 export default function Page() {
 	console.log('POSTGRES_URL:', process.env.POSTGRES_URL)

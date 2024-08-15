@@ -37,7 +37,7 @@ export default function ModalContainer({
 
 	return (
 		<>
-			<DefaultButton type={"button"} styleType={"dafault"} text={"Search"} onClickFunction={openModal} />
+			<DefaultButton type={"button"} styleType={"add"} text={"+ Add Car"} onClickFunction={openModal} />
 			<form onSubmit={handleSubmit} className={`${isModalOpen === true ? "block" : "hidden"}`}>
 				<div className="bg-black/50 fixed w-screen inset-0 flex justify-center items-center" onClick={(e) => handleParentClick(e)}>
 					<div className="bg-dirt-blue p-[30px] w-[800px] modal-content">

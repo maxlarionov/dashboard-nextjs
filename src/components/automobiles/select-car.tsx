@@ -3,17 +3,20 @@
 import { Make, Model } from "@/app/lib/definitions";
 import Select from "@/components/select";
 import { useState } from "react";
+import DefaultButton from "../defualt-button";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function SelectCar({
-	name,
-	options
+	options,
 }: {
-	name: string;
 	options: Model[]
 }) {
 	const [selectedMake, setSelectedMake] = useState<string>("Any Make")
 	const [selectedModel, setSelectedModel] = useState<string>("Any Model")
 	const [models, setModels] = useState<string[]>([])
+	const searchParams = useSearchParams()
+	const pathname = usePathname()
+	const { replace } = useRouter()
 
 	const handleMakeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const make = e.target.value
@@ -33,13 +36,23 @@ export default function SelectCar({
 	}
 
 	const handleSearch = () => {
+		const params = new URLSearchParams(searchParams)
 		if (selectedMake !== "Any Make" && selectedModel !== "Any Model") {
 			// Тут ви можете відправити запит або виконати іншу дію
+			params.set("query", selectedModel)
+			replace(`${pathname}?${params.toString()}`)
+
 			console.log(`Searching for ${selectedMake} ${selectedModel}`)
 			// Наприклад, виклик API або оновлення стану
 		} else if (selectedMake !== "Any Make") {
+			params.set("query", selectedMake)
+			replace(`${pathname}?${params.toString()}`)
+
 			console.log(`Searching for ${selectedMake}`)
 		} else {
+			// params.set("page", "1");
+			params.set("query", '')
+			replace(`${pathname}`)
 			console.log('Please select make')
 		}
 	}
@@ -51,11 +64,10 @@ export default function SelectCar({
 			<select
 				value={selectedMake}
 				onChange={(e) => handleMakeChange(e)}
-				id={name}
-				name={name}
+				name="make"
 				className="h-[37px] w-[170px] border-[3px] border-dirt-blue bg-black py-0 pl-2 text-gray-500"
 			>
-				<option>Any {name}</option>
+				<option>Any Make</option>
 				{uniqueMakes.map((make) => (
 					<option key={make} value={make}>{make}</option>
 				))}
@@ -65,8 +77,7 @@ export default function SelectCar({
 				value={selectedModel}
 				onChange={handleModelChange}
 				disabled={selectedMake === "Any Make"}
-				id={name}
-				name={name}
+				name="model"
 				className="h-[37px] w-[170px] border-[3px] border-dirt-blue bg-black py-0 pl-2 text-gray-500"
 			>
 				<option>Any Model</option>
@@ -74,10 +85,7 @@ export default function SelectCar({
 					<option key={model} value={model}>{model}</option>
 				))}
 			</select>
-			<button onClick={handleSearch} disabled={!selectedMake || !selectedModel}>
-				Search
-			</button>
-
+			<DefaultButton type="button" styleType="default" onClickFunction={handleSearch} text={"Search"} />
 		</>
 	)
 }
