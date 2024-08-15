@@ -1,7 +1,18 @@
+import { fetchFilteredInvoices, getInv } from "@/app/api/invoices/route";
+import { formatCurrency, formatDateToLocal } from "@/app/lib/utils";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline"
 
-export default function AnotherTable() {
-	const invoices = [1, 2, 3, 4]
+export default async function InvoicesTable({
+	query,
+	currentPage,
+}: {
+	query: string;
+	currentPage: number;
+}) {
+	const invoices = await fetchFilteredInvoices(query, currentPage)
+
+	console.log(invoices);
+
 
 	return (
 		<div>
@@ -15,12 +26,12 @@ export default function AnotherTable() {
 				</div>
 			</div>
 			{invoices?.map((invoice) => (
-				<div className="flex bg-black mb-[10px]">
+				<div key={invoice.id} className="flex bg-black mb-[10px]">
 					<div className="grid grid-cols-5 w-[1350px] bg-black pt-[13px] pb-[13px] pl-[20px] pr-[20px] items-center gap-[20px]">
-						<p>Freida Fujita</p>
+						<p>{invoice.name}</p>
 						<p>Audi Q7</p>
-						<p>$103 000</p>
-						<p>Oct 4, 2023</p>
+						<p>{formatCurrency(invoice.amount)}</p>
+						<p>{formatDateToLocal(invoice.date)}</p>
 						<div className="flex">
 							<p className="bg-orange pt-[7px] pb-[7px] pl-[18px] pr-[18px]">Paid</p>
 						</div>

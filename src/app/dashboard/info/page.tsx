@@ -1,6 +1,15 @@
-import DefaultButton from "@/components/defualt-button";
+import { fetchRevenue, getInv, getPets } from "@/app/api/invoices/route"
+import DefaultButton from "@/components/defualt-button"
+import { useState } from "react"
 
-export default function Page() {
+
+export default async function Page() {
+	const data = await getInv()
+
+
+	console.log(data)
+
+
 	return (
 		<main className="mt-[14px] max-w-[560px]">
 			<h2 className="font-cond text-[28px] font-medium"
@@ -22,6 +31,12 @@ export default function Page() {
 				</p>
 			</div>
 			<DefaultButton />
-		</main>
+			<button>Count</button>
+			<div>
+				{data.map((invoice) => (
+					<p key={invoice.id}>{invoice.name}</p>
+				))}
+			</div>
+		</main >
 	)
 }

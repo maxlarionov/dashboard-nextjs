@@ -1,11 +1,19 @@
+import { getAllCars, getCars, getCarsMakes, getCarsModal } from "@/app/api/automobiles/route";
 import AutoItem from "@/components/automobiles/auto-item";
 import DefaultButton from "@/components/defualt-button";
 import Input from "@/components/input";
-import Modal from "@/components/modal";
-import Modal2 from "@/components/modal2";
-import Select from "@/components/select";
+import ModalContainer from "@/components/modal-container";
+import CarOrdering from "@/components/car-ordering";
+import SelectCar from "@/components/automobiles/select-car";
+// import { useState } from "react";
 
-export default function Page() {
+export default async function Page() {
+	const cars = await getCars()
+	const makes = await getCarsMakes()
+	const model = await getCarsModal()
+
+	// console.log(cars)
+
 	return (
 		<main className="mt-[14px] max-w-[1504px]">
 			<h2 className="font-cond text-[28px] font-medium"
@@ -15,19 +23,18 @@ export default function Page() {
 			<div className="flex mt-[20px] justify-between">
 				<div className="flex w-full gap-x-[20px]">
 					<Input />
-					<Select />
-					<Select />
-					<DefaultButton />
+					<SelectCar name={"Make"} options={model} />
+					{/* <DefaultButton type={"button"} styleType={"dafault"} text={"Search"} onClickFunction={() => { }} /> */}
 				</div>
-				<DefaultButton />
+				{/* <Modal2 formAction={() => { }} options={makes} /> */}
+				<ModalContainer modalName={"Car Ordering"} options={model}>
+					<CarOrdering options={model} />
+				</ModalContainer>
 			</div>
 			<div className="mt-5 grid grid-cols-3 gap-[20px] xl:grid-cols-2 2xl:grid-cols-3">
-				<AutoItem />
-				<AutoItem />
-				<AutoItem />
-				<AutoItem />
-				<AutoItem />
-				<AutoItem />
+				{cars?.map((car) => (
+					<AutoItem key={car.carid} car={car} />
+				))}
 			</div>
 			<div className="flex gap-[20px] justify-center mt-[30px]">
 				<div className="flex w-[30px] h-[30px] justify-center items-center border-solid border-[3px] border-dirt-blue">
@@ -48,12 +55,6 @@ export default function Page() {
 					<p>{'>'}</p>
 				</div>
 			</div>
-			{/* <div>
-				<Modal />
-			</div>
-			<div>
-				<Modal2 />
-			</div> */}
 		</main>
 	)
 }
