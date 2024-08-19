@@ -1,6 +1,5 @@
 import BigCard from "@/components/dashboard/big-card";
 import Card from "@/components/dashboard/card"
-import { CalendarIcon, ClockIcon, CurrencyDollarIcon } from "@heroicons/react/24/outline"
 
 
 export default function Page() {

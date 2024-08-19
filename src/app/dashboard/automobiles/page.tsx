@@ -1,8 +1,8 @@
-import { getCars, getCarsMakes, getCarsMakeAndModels, getCurrentCars } from "@/app/api/automobiles/route";
 import AutoItem from "@/components/automobiles/auto-item";
 import ModalContainer from "@/components/modal-container";
 import CarOrdering from "@/components/car-ordering";
 import SelectCar from "@/components/automobiles/select-car";
+import { getCarsMakeAndModels, getCurrentCars } from "@/app/lib/automobiles-route";
 
 export default async function Page({
 	searchParams,

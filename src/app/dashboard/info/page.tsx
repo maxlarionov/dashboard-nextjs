@@ -1,4 +1,5 @@
-import { fetchRevenue, getInv, getPets } from "@/app/api/invoices/route"
+
+import { getInv } from "@/app/lib/invoices-route"
 import DefaultButton from "@/components/defualt-button"
 import { useState } from "react"
 
@@ -30,12 +31,12 @@ export default async function Page() {
 					More projects on the <a className="font-medium text-[24px] underline">GitHub</a> platform
 				</p>
 			</div>
-			<DefaultButton />
+			{/* <DefaultButton /> */}
 			<button>Count</button>
 			<div>
-				{data.map((invoice) => (
+				{/* {data.map((invoice) => (
 					<p key={invoice.id}>{invoice.name}</p>
-				))}
+				))} */}
 			</div>
 		</main >
 	)

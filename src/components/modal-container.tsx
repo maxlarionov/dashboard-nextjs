@@ -5,7 +5,6 @@ import Image from "next/image";
 import DefaultButton from "./defualt-button";
 import Select from "./select";
 import Input from "./input";
-import { getCarsMakes } from "@/app/api/automobiles/route";
 import { useState } from "react";
 import { Make } from "@/app/lib/definitions";
 
