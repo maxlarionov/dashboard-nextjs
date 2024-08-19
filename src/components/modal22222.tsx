@@ -40,8 +40,8 @@ export default function Modal() {
 							Automatic transmission, automatic climatisation (4 zones), self-steering systems, rear, 360° camera, adaptive cruise control, android auto.
 						</p>
 						<div className="flex justify-between">
-							<DefaultButton />
-							<DefaultButton />
+							{/* <DefaultButton />
+							<DefaultButton /> */}
 						</div>
 					</div>
 				</div>

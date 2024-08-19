@@ -23,7 +23,7 @@ export default function Login() {
 					<Link
 						href={"/dashboard"}
 					>
-						<DefaultButton />
+						{/* <DefaultButton /> */}
 					</Link>
 				</div>
 			</div>

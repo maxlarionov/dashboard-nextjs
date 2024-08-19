@@ -69,8 +69,8 @@ export default function Page() {
 				</div>
 			</div>
 			<div className="flex justify-end">
-				<DefaultButton />
-				<DefaultButton />
+				{/* <DefaultButton />
+				<DefaultButton /> */}
 			</div>
 		</main>
 	)
