@@ -1,5 +1,6 @@
 
-import { getInv } from "@/app/lib/invoices-route"
+
+import { getInv } from "@/app/lib/invoices-routes"
 import DefaultButton from "@/components/defualt-button"
 import { useState } from "react"
 

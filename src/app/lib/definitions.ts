@@ -31,3 +31,7 @@ export type Model = {
 	model: string
 	make: string
 }
+
+export type AllPages = {
+	count: string
+}

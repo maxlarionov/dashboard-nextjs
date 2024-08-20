@@ -1,4 +1,5 @@
-import { fetchFilteredInvoices } from "@/app/lib/invoices-route";
+
+import { fetchFilteredInvoices } from "@/app/lib/invoices-routes";
 import { formatCurrency, formatDateToLocal } from "@/app/lib/utils";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline"
 

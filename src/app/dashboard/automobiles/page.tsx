@@ -2,7 +2,8 @@ import AutoItem from "@/components/automobiles/auto-item";
 import ModalContainer from "@/components/modal-container";
 import CarOrdering from "@/components/car-ordering";
 import SelectCar from "@/components/automobiles/select-car";
-import { getCarsMakeAndModels, getCurrentCars } from "@/app/lib/automobiles-route";
+import { getAllPages, getCarsMakeAndModels, getCurrentCars } from "@/app/lib/automobiles-routes";
+import Pagination from "@/components/pagination";
 
 export default async function Page({
 	searchParams,
@@ -12,11 +13,13 @@ export default async function Page({
 		page?: string;
 	};
 }) {
-	const query = searchParams?.query || ''
+	const query = searchParams?.query || ""
+	const currentPage = Number(searchParams?.page) || 1
 	const makeAndModels = await getCarsMakeAndModels()
-	const filteredCars = await getCurrentCars(query)
+	const filteredCars = await getCurrentCars(query, currentPage)
+	const allPages = await getAllPages(query) || 1
 
-	console.log(filteredCars)
+	// console.log(allPages)
 
 	return (
 		<main className="mt-[14px] max-w-[1504px]">
@@ -26,11 +29,8 @@ export default async function Page({
 			</h2>
 			<div className="flex mt-[20px] justify-between">
 				<div className="flex w-full gap-x-[20px]">
-					{/* <Input /> */}
 					<SelectCar options={makeAndModels} />
-					{/* <DefaultButton type={"button"} styleType={"dafault"} text={"Search"} onClickFunction={() => { }} /> */}
 				</div>
-				{/* <Modal2 formAction={() => { }} options={makes} /> */}
 				<ModalContainer modalName={"Car Ordering"} options={makeAndModels}>
 					<CarOrdering options={makeAndModels} />
 				</ModalContainer>
@@ -40,25 +40,7 @@ export default async function Page({
 					<AutoItem key={car.carid} car={car} />
 				))}
 			</div>
-			<div className="flex gap-[20px] justify-center mt-[30px]">
-				<div className="flex w-[30px] h-[30px] justify-center items-center border-solid border-[3px] border-dirt-blue">
-					<p>{'<'}</p>
-				</div>
-				<div className="flex gap-2.5">
-					<div className="flex w-[30px] h-[30px] justify-center items-center border-solid border-[3px] border-dirt-blue">
-						<p>1</p>
-					</div>
-					<div className="flex w-[30px] h-[30px] justify-center items-center border-solid border-[3px] border-dirt-blue">
-						<p>2</p>
-					</div>
-					<div className="flex w-[30px] h-[30px] justify-center items-center border-solid border-[3px] border-dirt-blue">
-						<p>3</p>
-					</div>
-				</div>
-				<div className="flex w-[30px] h-[30px] justify-center items-center border-solid border-[3px] border-dirt-blue">
-					<p>{'>'}</p>
-				</div>
-			</div>
+			<Pagination allPages={allPages} />
 		</main>
 	)
 }
