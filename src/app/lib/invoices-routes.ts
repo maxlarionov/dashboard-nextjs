@@ -3,26 +3,6 @@ import { TInvoicesTable } from '@/app/lib/definitions';
 import { sql } from '@vercel/postgres';
 import { z } from 'zod';
 
-export async function getInv() {
-	try {
-		const result = await sql`
-		SELECT * FROM Pets
-		`
-		// const date = result.rows.map((invoice) => ({
-		// 	...invoice,
-		// 	amount: formatC
-		// }))
-
-		return result.rows
-	} catch (error) {
-		console.error('Database Error:', error)
-		return {
-			message: 'Database Error: Failed to Get Invoice.',
-		}
-	}
-
-}
-
 const FormSchema = z.object({
 	id: z.string(),
 	customerId: z.string(),
@@ -55,7 +35,7 @@ export async function createInvoice(formData: FormData) {
 }
 
 const ITEMS_PER_PAGE = 6;
-export async function fetchFilteredInvoices(
+export async function getCurrentInvoices(
 	query: string,
 	currentPage: number,
 ) {
@@ -86,6 +66,32 @@ export async function fetchFilteredInvoices(
 		return invoices.rows;
 	} catch (error) {
 		console.error('Database Error:', error)
-		throw new Error('Failed to fetch invoices.');
+		throw new Error('Failed to get invoices.');
 	}
+}
+
+export async function getAllInvoicesPages(query: string) {
+	try {
+		const result = await sql`
+			SELECT COUNT(*)
+				FROM invoices
+				JOIN customers ON invoices.customer_id = customers.id
+				WHERE
+        customers.name ILIKE ${`%${query}%`} OR
+        customers.email ILIKE ${`%${query}%`} OR
+        invoices.amount::text ILIKE ${`%${query}%`} OR
+        invoices.date::text ILIKE ${`%${query}%`} OR
+        invoices.status ILIKE ${`%${query}%`}
+			`
+
+		// console.log(`First: ${result.rows[0]}`)
+
+		const totalPages = Math.ceil(Number(result.rows[0].count) / ITEMS_PER_PAGE)
+		return totalPages
+
+	} catch (error) {
+		console.error("Database Error:", error)
+		throw new Error("Failed to get the Invoices Pages")
+	}
+
 }

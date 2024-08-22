@@ -2,7 +2,7 @@ import AutoItem from "@/components/automobiles/auto-item";
 import ModalContainer from "@/components/modal-container";
 import CarOrdering from "@/components/car-ordering";
 import SelectCar from "@/components/automobiles/select-car";
-import { getAllPages, getCarsMakeAndModels, getCurrentCars } from "@/app/lib/automobiles-routes";
+import { getAllCarsPages, getCarsMakeAndModels, getCurrentCars } from "@/app/lib/automobiles-routes";
 import Pagination from "@/components/pagination";
 
 export default async function Page({
@@ -17,9 +17,7 @@ export default async function Page({
 	const currentPage = Number(searchParams?.page) || 1
 	const makeAndModels = await getCarsMakeAndModels()
 	const filteredCars = await getCurrentCars(query, currentPage)
-	const allPages = await getAllPages(query) || 1
-
-	// console.log(allPages)
+	const allCarsPages = await getAllCarsPages(query) || 1
 
 	return (
 		<main className="mt-[14px] max-w-[1504px]">
@@ -40,7 +38,7 @@ export default async function Page({
 					<AutoItem key={car.carid} car={car} />
 				))}
 			</div>
-			<Pagination allPages={allPages} />
+			<Pagination allPages={allCarsPages} />
 		</main>
 	)
 }

@@ -1,18 +1,21 @@
 
-import { fetchFilteredInvoices } from "@/app/lib/invoices-routes";
+import { TInvoicesTable } from "@/app/lib/definitions";
+import { getCurrentInvoices } from "@/app/lib/invoices-routes";
 import { formatCurrency, formatDateToLocal } from "@/app/lib/utils";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline"
 
 export default async function InvoicesTable({
 	query,
 	currentPage,
+	invoices
 }: {
 	query: string;
 	currentPage: number;
+	invoices: TInvoicesTable[];
 }) {
-	const invoices = await fetchFilteredInvoices(query, currentPage)
 
-	console.log(invoices);
+
+	console.log(invoices)
 
 
 	return (

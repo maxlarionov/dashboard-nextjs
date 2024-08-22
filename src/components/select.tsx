@@ -14,8 +14,8 @@ export default function Select({
 			className="h-[37px] w-[170px] border-[3px] border-dirt-blue bg-black py-0 pl-2 text-gray-500"
 		>
 			<option>Any {name}</option>
-			{options.map((option) => (
-				<option key={option.make}>{option.make}</option>
+			{options.map((option, index) => (
+				<option key={(index + 1) + "_car"}>{option.make}</option>
 			))}
 		</select>
 	)

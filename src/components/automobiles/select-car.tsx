@@ -1,7 +1,6 @@
 "use client"
 
 import { Make, Model } from "@/app/lib/definitions";
-import Select from "@/components/select";
 import { useState } from "react";
 import DefaultButton from "../defualt-button";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -40,20 +39,19 @@ export default function SelectCar({
 		if (selectedMake !== "Any Make" && selectedModel !== "Any Model") {
 			// Тут ви можете відправити запит або виконати іншу дію
 			params.set("query", selectedModel)
+			params.set("page", "1")
 			replace(`${pathname}?${params.toString()}`)
 
-			console.log(`Searching for ${selectedMake} ${selectedModel}`)
 			// Наприклад, виклик API або оновлення стану
 		} else if (selectedMake !== "Any Make") {
 			params.set("query", selectedMake)
+			params.set("page", "1")
 			replace(`${pathname}?${params.toString()}`)
 
-			console.log(`Searching for ${selectedMake}`)
 		} else {
 			// params.set("page", "1");
 			params.set("query", '')
 			replace(`${pathname}`)
-			console.log('Please select make')
 		}
 	}
 
