@@ -29,7 +29,7 @@ export async function getCarsMakes() {
 
 export async function getCarsMakeAndModels() {
 	try {
-		const result = await sql<Car>`SELECT cars.model, cars.make FROM cars`
+		const result = await sql<Model>`SELECT cars.model, cars.make, cars.price FROM cars`
 
 		return result.rows
 	} catch (error) {

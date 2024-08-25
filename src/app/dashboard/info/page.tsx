@@ -1,15 +1,10 @@
 
 
-import { getInv } from "@/app/lib/invoices-routes"
 import DefaultButton from "@/components/defualt-button"
 import { useState } from "react"
 
 
 export default async function Page() {
-	const data = await getInv()
-
-
-	console.log(data)
 
 
 	return (

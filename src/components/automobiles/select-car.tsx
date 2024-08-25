@@ -1,18 +1,28 @@
 "use client"
 
 import { Make, Model } from "@/app/lib/definitions";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import DefaultButton from "../defualt-button";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import Select from "../select";
 
 export default function SelectCar({
 	options,
+	isSearch,
+	setSelectedCar
 }: {
 	options: Model[]
+	isSearch: boolean
+	setSelectedCar: Dispatch<SetStateAction<Model>>
 }) {
-	const [selectedMake, setSelectedMake] = useState<string>("Any Make")
-	const [selectedModel, setSelectedModel] = useState<string>("Any Model")
+	const [selectedMake, setSelectedMake] = useState<string>("Any make")
+	const [selectedModel, setSelectedModel] = useState<string>("Any model")
 	const [models, setModels] = useState<string[]>([])
+
+
+
+
+	const chooseMake = selectedMake === "Any make"
 	const searchParams = useSearchParams()
 	const pathname = usePathname()
 	const { replace } = useRouter()
@@ -27,23 +37,26 @@ export default function SelectCar({
 		console.log(filteredModels)
 
 		setModels(filteredModels)
-		setSelectedModel("Any Model")
+		setSelectedModel("Any model")
 	}
 
 	const handleModelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		setSelectedModel(e.target.value);
+		setSelectedModel(e.target.value)
+		const car = { make: selectedMake, model: e.target.value, price: 0 }
+		console.log(car)
+		setSelectedCar(car)
 	}
 
 	const handleSearch = () => {
 		const params = new URLSearchParams(searchParams)
-		if (selectedMake !== "Any Make" && selectedModel !== "Any Model") {
+		if (selectedMake !== "Any make" && selectedModel !== "Any model") {
 			// Тут ви можете відправити запит або виконати іншу дію
 			params.set("query", selectedModel)
 			params.set("page", "1")
 			replace(`${pathname}?${params.toString()}`)
 
 			// Наприклад, виклик API або оновлення стану
-		} else if (selectedMake !== "Any Make") {
+		} else if (selectedMake !== "Any make") {
 			params.set("query", selectedMake)
 			params.set("page", "1")
 			replace(`${pathname}?${params.toString()}`)
@@ -55,35 +68,15 @@ export default function SelectCar({
 		}
 	}
 
-	const uniqueMakes = Array.from(new Set(options.map((car) => car.make)));
+	const uniqueMakes = Array.from(new Set(options.map((car) => car.make)))
 
 	return (
 		<>
-			<select
-				value={selectedMake}
-				onChange={(e) => handleMakeChange(e)}
-				name="make"
-				className="h-[37px] w-[170px] border-[3px] border-dirt-blue bg-black py-0 pl-2 text-gray-500"
-			>
-				<option>Any Make</option>
-				{uniqueMakes.map((make) => (
-					<option key={make} value={make}>{make}</option>
-				))}
-			</select>
-
-			<select
-				value={selectedModel}
-				onChange={handleModelChange}
-				disabled={selectedMake === "Any Make"}
-				name="model"
-				className="h-[37px] w-[170px] border-[3px] border-dirt-blue bg-black py-0 pl-2 text-gray-500"
-			>
-				<option>Any Model</option>
-				{models.map((model) => (
-					<option key={model} value={model}>{model}</option>
-				))}
-			</select>
-			<DefaultButton type="button" styleType="default" onClickFunction={handleSearch} text={"Search"} />
+			<Select value={selectedMake} name={"make"} options={uniqueMakes} onChange={handleMakeChange} />
+			<Select value={selectedModel} name={"model"} options={models} onChange={handleModelChange} disabled={chooseMake} />
+			{isSearch === true && (
+				<DefaultButton type="button" styleType="default" onClickFunction={handleSearch} text={"Search"} />
+			)}
 		</>
 	)
 }

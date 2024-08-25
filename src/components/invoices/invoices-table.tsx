@@ -15,7 +15,7 @@ export default async function InvoicesTable({
 }) {
 
 
-	console.log(invoices)
+	// console.log(invoices)
 
 
 	return (
@@ -36,9 +36,15 @@ export default async function InvoicesTable({
 						<p>Audi Q7</p>
 						<p>{formatCurrency(invoice.amount)}</p>
 						<p>{formatDateToLocal(invoice.date)}</p>
-						<div className="flex">
-							<p className="bg-orange pt-[7px] pb-[7px] pl-[18px] pr-[18px]">Paid</p>
-						</div>
+						{invoice.status === "paid" ? (
+							<div className="flex">
+								<p className="bg-orange pt-[7px] pb-[7px] pl-[18px] pr-[18px]">Paid</p>
+							</div>
+						) : (
+							<div className="flex">
+								<p className="bg-dirt-blue pt-[7px] pb-[7px] pl-[18px] pr-[18px]">Pending</p>
+							</div>
+						)}
 					</div>
 					<div className="flex m-[13px] gap-[20px]">
 						<div className="p-[5px] bg-yellow">

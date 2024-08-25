@@ -30,8 +30,13 @@ export type Make = {
 export type Model = {
 	model: string
 	make: string
+	price: number
 }
 
 export type AllPages = {
 	count: string
+}
+
+export type Customer = {
+	name: string
 }

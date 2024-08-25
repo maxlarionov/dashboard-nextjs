@@ -9,11 +9,10 @@ import { useState } from "react";
 import { Make } from "@/app/lib/definitions";
 
 export default function ModalContainer({
-	modalName, options, children
+	modalName, children
 }: {
 	// formAction: () => void;
 	modalName: string;
-	options: Make[];
 	children: React.ReactNode;
 }) {
 	const handleSubmit = (event: React.FormEvent) => {

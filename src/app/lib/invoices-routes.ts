@@ -1,5 +1,5 @@
 
-import { TInvoicesTable } from '@/app/lib/definitions';
+import { Customer, TInvoicesTable } from '@/app/lib/definitions';
 import { sql } from '@vercel/postgres';
 import { z } from 'zod';
 
@@ -67,6 +67,27 @@ export async function getCurrentInvoices(
 	} catch (error) {
 		console.error('Database Error:', error)
 		throw new Error('Failed to get invoices.');
+	}
+}
+
+export async function getCurrentCustomers(
+	currentCustomer: string,
+) {
+
+	try {
+		const customers = await sql<Customer>`
+      SELECT
+        customers.name
+      FROM customers
+      WHERE
+        customers.name ILIKE ${`%${currentCustomer}%`}
+      LIMIT 5
+    `;
+
+		return customers.rows;
+	} catch (error) {
+		console.error('Database Error:', error)
+		throw new Error('Failed to get customers.');
 	}
 }
 
