@@ -70,7 +70,7 @@ export default function Pagination({
 					<div
 						key={page}
 						onClick={() => changePage(page)}
-						className={`flex h-[30px] justify-center items-center border-solid border-[3px] border-dirt-blue pl-2 pr-2 ${currentPage === page ? "bg-dirt-blue" : "bg-black"}`}>
+						className={`flex h-[30px] justify-center items-center border-solid border-[3px] border-dirt-blue pl-2 pr-2 cursor-pointer ${currentPage === page ? "bg-dirt-blue" : "bg-black"}`}>
 						<p>{page}</p>
 					</div>
 				))}

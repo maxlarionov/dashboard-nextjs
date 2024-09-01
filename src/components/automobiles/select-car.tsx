@@ -13,7 +13,7 @@ export default function SelectCar({
 }: {
 	options: Model[]
 	isSearch: boolean
-	setSelectedCar: Dispatch<SetStateAction<Model>>
+	setSelectedCar?: Dispatch<SetStateAction<Model>>
 }) {
 	const [selectedMake, setSelectedMake] = useState<string>("Any make")
 	const [selectedModel, setSelectedModel] = useState<string>("Any model")
@@ -42,9 +42,10 @@ export default function SelectCar({
 
 	const handleModelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		setSelectedModel(e.target.value)
-		const car = { make: selectedMake, model: e.target.value, price: 0 }
+		const car = { make: selectedMake, model: e.target.value, price: 0, carid: "" }
 		console.log(car)
-		setSelectedCar(car)
+		if (setSelectedCar)
+			setSelectedCar(car)
 	}
 
 	const handleSearch = () => {

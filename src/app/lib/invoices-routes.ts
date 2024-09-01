@@ -24,7 +24,7 @@ export async function createInvoice(formData: FormData) {
 
 	try {
 		await sql`
-      INSERT INTO invoices (customer_id, amount, status, date)
+      INSERT INTO pga_invoices (customerid, amount, status, date)
       VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
     `
 	} catch (error) {
@@ -39,34 +39,40 @@ export async function getCurrentInvoices(
 	query: string,
 	currentPage: number,
 ) {
-	const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+	const offset = (currentPage - 1) * ITEMS_PER_PAGE
 
 	try {
 		const invoices = await sql<TInvoicesTable>`
       SELECT
-        invoices.id,
-        invoices.amount,
-        invoices.date,
-        invoices.status,
-        customers.name,
-        customers.email,
-        customers.image_url
-      FROM invoices
-      JOIN customers ON invoices.customer_id = customers.id
+        pga_invoices.id,
+        pga_invoices.amount,
+        pga_invoices.date,
+        pga_invoices.status,
+        pga_invoices.carid,
+        pga_customers.name,
+        pga_customers.email,
+        pga_customers.city
+      FROM pga_invoices
+      JOIN pga_customers ON pga_invoices.customerid = pga_customers.id
       WHERE
-        customers.name ILIKE ${`%${query}%`} OR
-        customers.email ILIKE ${`%${query}%`} OR
-        invoices.amount::text ILIKE ${`%${query}%`} OR
-        invoices.date::text ILIKE ${`%${query}%`} OR
-        invoices.status ILIKE ${`%${query}%`}
-      ORDER BY invoices.date DESC
+        pga_customers.name ILIKE ${`%${query}%`} OR
+        pga_customers.email ILIKE ${`%${query}%`} OR
+        pga_customers.city ILIKE ${`%${query}%`} OR
+        pga_invoices.amount::text ILIKE ${`%${query}%`} OR
+        pga_invoices.date::text ILIKE ${`%${query}%`} OR
+        pga_invoices.carid::text ILIKE ${`%${query}%`} OR
+        pga_invoices.status ILIKE ${`%${query}%`}
+      ORDER BY pga_invoices.date DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
+
+		console.log(invoices.rows);
+
 
 		return invoices.rows;
 	} catch (error) {
 		console.error('Database Error:', error)
-		throw new Error('Failed to get invoices.');
+		throw new Error('Failed to get invoices.')
 	}
 }
 
@@ -77,17 +83,17 @@ export async function getCurrentCustomers(
 	try {
 		const customers = await sql<Customer>`
       SELECT
-        customers.name
-      FROM customers
+        pga_customers.name
+      FROM pga_customers
       WHERE
-        customers.name ILIKE ${`%${currentCustomer}%`}
+        pga_customers.name ILIKE ${`%${currentCustomer}%`}
       LIMIT 5
     `;
 
 		return customers.rows;
 	} catch (error) {
 		console.error('Database Error:', error)
-		throw new Error('Failed to get customers.');
+		throw new Error('Failed to get customers.')
 	}
 }
 
@@ -95,14 +101,14 @@ export async function getAllInvoicesPages(query: string) {
 	try {
 		const result = await sql`
 			SELECT COUNT(*)
-				FROM invoices
-				JOIN customers ON invoices.customer_id = customers.id
+				FROM pga_invoices
+				JOIN pga_customers ON pga_invoices.customerid = pga_customers.id
 				WHERE
-        customers.name ILIKE ${`%${query}%`} OR
-        customers.email ILIKE ${`%${query}%`} OR
-        invoices.amount::text ILIKE ${`%${query}%`} OR
-        invoices.date::text ILIKE ${`%${query}%`} OR
-        invoices.status ILIKE ${`%${query}%`}
+        pga_customers.name ILIKE ${`%${query}%`} OR
+        pga_customers.email ILIKE ${`%${query}%`} OR
+        pga_invoices.amount::text ILIKE ${`%${query}%`} OR
+        pga_invoices.date::text ILIKE ${`%${query}%`} OR
+        pga_invoices.status ILIKE ${`%${query}%`}
 			`
 
 		// console.log(`First: ${result.rows[0]}`)

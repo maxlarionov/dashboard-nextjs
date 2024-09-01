@@ -33,7 +33,7 @@ export default async function Page({
 				<div className="flex w-full gap-x-[20px]">
 					<SelectCar options={makeAndModels} isSearch={true} />
 				</div>
-				<ModalContainer modalName={"Car Ordering"} options={makeAndModels}>
+				<ModalContainer modalName={"Car Ordering"}>
 					<CarOrdering options={makeAndModels} filteredCustomers={filteredCustomers} />
 				</ModalContainer>
 			</div>

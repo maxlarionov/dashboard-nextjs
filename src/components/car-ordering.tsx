@@ -21,7 +21,7 @@ export default function CarOrdering({
 	const { replace } = useRouter()
 	const [currentCustomer, setCurrentCustomer] = useState("")
 	const [customersModal, setCustomersModal] = useState(false)
-	const [selectedCar, setSelectedCar] = useState<Model>({ make: "", model: "", price: 0 })
+	const [selectedCar, setSelectedCar] = useState<Model>({ make: "", model: "", price: 0, carid: "" })
 	const [customerName, setCustomerName] = useState("")
 	const [customerEmail, setCustomerEmail] = useState("")
 	const [customerCity, setCustomerCity] = useState("")

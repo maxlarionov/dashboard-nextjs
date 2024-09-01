@@ -1,5 +1,5 @@
 
-import { TInvoicesTable } from "@/app/lib/definitions";
+import { Model, TInvoicesTable } from "@/app/lib/definitions";
 import { getCurrentInvoices } from "@/app/lib/invoices-routes";
 import { formatCurrency, formatDateToLocal } from "@/app/lib/utils";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline"
@@ -7,15 +7,22 @@ import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline"
 export default async function InvoicesTable({
 	query,
 	currentPage,
-	invoices
+	invoices,
+	cars,
 }: {
 	query: string;
 	currentPage: number;
 	invoices: TInvoicesTable[];
+	cars: Model[]
 }) {
 
+	const test = invoices.map((inv) => {
+		return cars.filter((car) => car.carid === inv.carid)
+		// return 123
+	})
 
-	// console.log(invoices)
+	console.log(`test: ${test}`);
+
 
 
 	return (
@@ -33,7 +40,8 @@ export default async function InvoicesTable({
 				<div key={invoice.id} className="flex bg-black mb-[10px]">
 					<div className="grid grid-cols-5 w-[1350px] bg-black pt-[13px] pb-[13px] pl-[20px] pr-[20px] items-center gap-[20px]">
 						<p>{invoice.name}</p>
-						<p>Audi Q7</p>
+						<>{cars.filter((car) => car.carid === invoice.carid)}</>
+						<>{console.log(invoice.carid)}</>
 						<p>{formatCurrency(invoice.amount)}</p>
 						<p>{formatDateToLocal(invoice.date)}</p>
 						{invoice.status === "paid" ? (

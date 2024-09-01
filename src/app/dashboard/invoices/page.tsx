@@ -41,7 +41,7 @@ export default async function Page({
 				</ModalContainer>
 			</div>
 			<div className="p-4 mt-[20px] bg-dirt-blue">
-				<InvoicesTable query={query} currentPage={1} invoices={filteredInvoices} />
+				<InvoicesTable query={query} currentPage={1} invoices={filteredInvoices} cars={makeAndModels} />
 			</div>
 			<Pagination allPages={allInvoicesPages} />
 		</main>

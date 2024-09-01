@@ -1,10 +1,10 @@
 
 export type TInvoicesTable = {
 	id: string;
-	customer_id: string;
+	customerid: string;
 	name: string;
 	email: string;
-	image_url: string;
+	carid: string;
 	date: string;
 	amount: number;
 	status: 'pending' | 'paid';
@@ -24,13 +24,14 @@ export type Car = {
 }
 
 export type Make = {
-	make: string
+	make: string;
 }
 
 export type Model = {
-	model: string
-	make: string
-	price: number
+	model: string;
+	make: string;
+	carid: string;
+	price: number;
 }
 
 export type AllPages = {
