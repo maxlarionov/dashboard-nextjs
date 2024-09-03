@@ -66,7 +66,7 @@ export async function getCurrentCars(query: string, currentPage: number) {
 		}
 		if (!query) {
 			const result = await sql<Car>`
-			SELECT * FROM pga_cars WHERE CarID>0
+			SELECT * FROM pga_cars
 			LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset};
 			`
 			return result.rows
