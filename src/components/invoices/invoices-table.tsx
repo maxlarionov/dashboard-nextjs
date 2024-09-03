@@ -36,7 +36,10 @@ export default async function InvoicesTable({
 				<div key={invoice.id} className="flex bg-black mb-[10px]">
 					<div className="grid grid-cols-5 w-[1350px] bg-black pt-[13px] pb-[13px] pl-[20px] pr-[20px] items-center gap-[20px]">
 						<p>{invoice.name}</p>
-						<>{cars.filter((car) => car.carid === invoice.carid)}</>
+						<p>
+							{cars.filter((car) => car.carid === invoice.carid)
+								.map(car => `${car.make} ${car.model}`)}
+						</p>
 						{/* <>{console.log(invoice.carid)}</> */}
 						<p>{formatCurrency(invoice.amount)}</p>
 						<p>{formatDateToLocal(invoice.date)}</p>
