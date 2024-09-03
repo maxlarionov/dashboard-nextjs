@@ -5,13 +5,9 @@ import { formatCurrency, formatDateToLocal } from "@/app/lib/utils";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline"
 
 export default async function InvoicesTable({
-	query,
-	currentPage,
 	invoices,
 	cars,
 }: {
-	query: string;
-	currentPage: number;
 	invoices: TInvoicesTable[];
 	cars: Model[]
 }) {
@@ -21,7 +17,7 @@ export default async function InvoicesTable({
 		// return 123
 	})
 
-	console.log(`test: ${test}`);
+	// console.log(`test: ${test}`);
 
 
 
@@ -41,7 +37,7 @@ export default async function InvoicesTable({
 					<div className="grid grid-cols-5 w-[1350px] bg-black pt-[13px] pb-[13px] pl-[20px] pr-[20px] items-center gap-[20px]">
 						<p>{invoice.name}</p>
 						<>{cars.filter((car) => car.carid === invoice.carid)}</>
-						<>{console.log(invoice.carid)}</>
+						{/* <>{console.log(invoice.carid)}</> */}
 						<p>{formatCurrency(invoice.amount)}</p>
 						<p>{formatDateToLocal(invoice.date)}</p>
 						{invoice.status === "paid" ? (

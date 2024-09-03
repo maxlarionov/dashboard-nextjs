@@ -3,11 +3,11 @@ import { Dispatch, SetStateAction } from "react"
 export default function Input({
 	placeholder,
 	value,
-	onChange
+	onChange,
 }: {
 	placeholder: string
-	value: string
-	onChange: Dispatch<SetStateAction<string>>
+	value?: string
+	onChange: Dispatch<SetStateAction<string>> | ((term: string) => void)
 }) {
 	return (
 		<input

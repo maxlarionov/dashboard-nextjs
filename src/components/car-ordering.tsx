@@ -8,10 +8,12 @@ import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import SelectCar from "./automobiles/select-car";
 import DefaultButton from "./defualt-button";
+import NewCustomer from "./new-customer";
+import { createInvoice } from "@/app/lib/invoices-routes";
 
 export default function CarOrdering({
 	options,
-	filteredCustomers
+	filteredCustomers,
 }: {
 	options: Model[]
 	filteredCustomers: Customer[]
@@ -20,11 +22,11 @@ export default function CarOrdering({
 	const pathname = usePathname()
 	const { replace } = useRouter()
 	const [currentCustomer, setCurrentCustomer] = useState("")
-	const [customersModal, setCustomersModal] = useState(false)
-	const [selectedCar, setSelectedCar] = useState<Model>({ make: "", model: "", price: 0, carid: "" })
 	const [customerName, setCustomerName] = useState("")
 	const [customerEmail, setCustomerEmail] = useState("")
 	const [customerCity, setCustomerCity] = useState("")
+	const [customersModal, setCustomersModal] = useState(false)
+	const [selectedCar, setSelectedCar] = useState<Model>({ make: "", model: "", price: 0, carid: "" })
 	const car = options.filter((car) => car.model === selectedCar.model)
 
 
@@ -40,7 +42,7 @@ export default function CarOrdering({
 	}, 1000)
 
 	const handleOption = (term: string) => {
-		console.log(term);
+		console.log(term)
 
 		const params = new URLSearchParams(searchParams)
 		if (term) {
@@ -68,10 +70,39 @@ export default function CarOrdering({
 	}
 
 	const order = () => {
+		try {
+			if (currentCustomer !== "") {
+				const customerData = filteredCustomers.filter((customer) => customer.name === currentCustomer)
+				const customerId = customerData[0].id
+				// const car = selectedCar.make + " " + selectedCar.model
+				const car = options.filter((car) => car.model === selectedCar.model)
+				const customerCar = car[0].carid
+				const customerCarAmount = car[0].price
 
-		const createdInvoice = { customerName, customerEmail, customerCity, selectedCar, currentCustomer }
-		console.log(createdInvoice)
+				console.log({ customerId, customerCar, customerCarAmount, newCustomer: false })
+				createInvoice({ customerId, customerCar, customerCarAmount, newCustomer: false })
+				// console.log(createdInvoice)
+				setCustomersModal(false)
 
+			} else {
+				const car = options.filter((car) => car.model === selectedCar.model)
+				const customerCar = car[0].carid
+				const customerCarAmount = car[0].price
+				// const createdInvoice = { name: customerName, email: customerEmail, city: customerCity, carid, amount, new: true }
+				createInvoice({ customerName, customerEmail, customerCity, customerCar, customerCarAmount, newCustomer: true })
+				// console.log(createdInvoice)
+				setCustomersModal(false)
+			}
+		} catch (error) {
+			console.error('Database Error:', error)
+			throw new Error('Failed to get invoices.')
+		}
+
+
+		// createInvoice({ customerId, customerName, customerEmail, customerCity, customerCar, customerCarAmount, newCustomer: false })
+
+		// const createdInvoice = { customerName, customerEmail, customerCity, selectedCar, currentCustomer }
+		// console.log(createdInvoice)
 	}
 
 	return (

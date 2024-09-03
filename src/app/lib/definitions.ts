@@ -1,37 +1,41 @@
 
 export type TInvoicesTable = {
-	id: string;
-	customerid: string;
-	name: string;
-	email: string;
-	carid: string;
-	date: string;
-	amount: number;
-	status: 'pending' | 'paid';
+	id: string
+	customerid: string
+	name: string
+	carid: string
+	date: string
+	amount: number
+	status: 'pending' | 'paid'
+	email?: string
+	city?: string
+	new?: boolean
 }
 
+
+
 export type Car = {
-	carid: string;
-	make: string;
-	model: string;
-	fuel: string;
-	power: string;
-	powertrain: string;
-	category: string;
-	description: string;
-	price: string;
-	image: string;
+	carid: string
+	make: string
+	model: string
+	fuel: string
+	power: string
+	powertrain: string
+	category: string
+	description: string
+	price: string
+	image: string
 }
 
 export type Make = {
-	make: string;
+	make: string
 }
 
 export type Model = {
-	model: string;
-	make: string;
-	carid: string;
-	price: number;
+	model: string
+	make: string
+	carid: string
+	price: number
 }
 
 export type AllPages = {
@@ -39,5 +43,8 @@ export type AllPages = {
 }
 
 export type Customer = {
+	id: string
 	name: string
+	email: string
+	city: string
 }

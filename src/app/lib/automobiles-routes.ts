@@ -31,7 +31,7 @@ export async function getCarsMakeAndModels() {
 	try {
 		const result = await sql<Model>`SELECT pga_cars.model, pga_cars.make, pga_cars.carid, pga_cars.price FROM pga_cars`
 
-		console.log(result.rows)
+		// console.log(result.rows)
 
 		return result.rows
 	} catch (error) {

@@ -43,7 +43,7 @@ export default function SelectCar({
 	const handleModelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		setSelectedModel(e.target.value)
 		const car = { make: selectedMake, model: e.target.value, price: 0, carid: "" }
-		console.log(car)
+		// console.log(car)
 		if (setSelectedCar)
 			setSelectedCar(car)
 	}

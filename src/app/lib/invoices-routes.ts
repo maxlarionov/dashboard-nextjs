@@ -1,6 +1,7 @@
 
 import { Customer, TInvoicesTable } from '@/app/lib/definitions';
 import { sql } from '@vercel/postgres';
+import { log } from 'console';
 import { z } from 'zod';
 
 const FormSchema = z.object({
@@ -13,20 +14,60 @@ const FormSchema = z.object({
 
 const CreateInvoice = FormSchema.omit({ id: true, date: true })
 
-export async function createInvoice(formData: FormData) {
-	const { customerId, amount, status } = CreateInvoice.parse({
-		customerId: formData.get('customerId'),
-		amount: formData.get('amount'),
-		status: formData.get('status'),
-	})
-	const amountInCents = amount * 100
+export async function createInvoice({
+	customerId,
+	customerName,
+	customerCar,
+	customerCarAmount,
+	customerEmail,
+	customerCity,
+	newCustomer
+}: {
+	customerId?: string
+	customerName?: string
+	customerCar: string
+	customerCarAmount: number
+	customerEmail?: string
+	customerCity?: string
+	newCustomer: boolean
+}) {
+
+
 	const date = new Date().toISOString().split('T')[0]
 
 	try {
-		await sql`
-      INSERT INTO pga_invoices (customerid, amount, status, date)
-      VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
+		if (newCustomer === true) {
+			await sql`
+      INSERT INTO pga_customers (name, email, city)
+      VALUES (${customerName}, ${customerEmail}, ${customerCity})
+			`
+			const customer = await sql`
+			SELECT 
+				pga_customers.id
+			FROM pga_customers
+			WHERE pga_customers.name = ${customerName}
+			`
+
+			const customerid = customer.rows[0]
+			console.log(customerid, customerid.id)
+
+			await sql`
+      INSERT INTO pga_invoices (customerid, carid, amount, status, date)
+      VALUES (${customerid.id}, ${customerCar}, ${customerCarAmount}, 'prnding', ${date})
+    	`
+		} else {
+
+			console.log({ customerId, customerCar, customerCarAmount, status: 'pending', date });
+
+			await sql`
+  	  INSERT INTO pga_invoices (customerid, carid, amount, status, date)
+      VALUES (${customerId}, ${customerCar}, ${customerCarAmount}, 'pending', ${date})
+			
     `
+		}
+		// INSERT INTO pga_invoices (customerid, carid, amount, status, date)
+		// VALUES ('3958dc9e-712f-4377-85e9-fec4b6a6442a', '9f3c794a-7296-4320-a05a-69f960321fef', 12311, 'Pending', '2024-09-03')
+
 	} catch (error) {
 		return {
 			message: 'Database Error: Failed to Create Invoice.',
@@ -66,7 +107,7 @@ export async function getCurrentInvoices(
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
 
-		console.log(invoices.rows);
+		// console.log(invoices.rows);
 
 
 		return invoices.rows;
@@ -83,7 +124,7 @@ export async function getCurrentCustomers(
 	try {
 		const customers = await sql<Customer>`
       SELECT
-        pga_customers.name
+        *
       FROM pga_customers
       WHERE
         pga_customers.name ILIKE ${`%${currentCustomer}%`}

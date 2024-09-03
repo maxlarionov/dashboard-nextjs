@@ -13,6 +13,12 @@ export default async function Page({
 		query?: string;
 		page?: string;
 		customer?: string;
+		name?: string;
+		email?: string;
+		city?: string;
+		carid?: string;
+		amount?: string;
+		new?: boolean;
 	};
 }) {
 	const query = searchParams?.query || ""
@@ -41,7 +47,7 @@ export default async function Page({
 				</ModalContainer>
 			</div>
 			<div className="p-4 mt-[20px] bg-dirt-blue">
-				<InvoicesTable query={query} currentPage={1} invoices={filteredInvoices} cars={makeAndModels} />
+				<InvoicesTable invoices={filteredInvoices} cars={makeAndModels} />
 			</div>
 			<Pagination allPages={allInvoicesPages} />
 		</main>
