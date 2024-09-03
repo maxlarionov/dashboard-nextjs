@@ -7,7 +7,7 @@ export const revalidate = 0
 
 export async function getCars() {
 	try {
-		const result = await sql<Car>`SELECT * FROM pga_cars WHERE CarID>0`
+		const result = await sql<Car>`SELECT * FROM pga_cars`
 
 		return result.rows
 	} catch (error) {
