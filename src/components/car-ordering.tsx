@@ -8,7 +8,6 @@ import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import SelectCar from "./automobiles/select-car";
 import DefaultButton from "./defualt-button";
-import NewCustomer from "./new-customer";
 import { createInvoice } from "@/app/lib/invoices-routes";
 
 export default function CarOrdering({

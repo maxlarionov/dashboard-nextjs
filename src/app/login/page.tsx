@@ -15,10 +15,10 @@ export default function Login() {
 						Sign in to your account
 					</h2>
 					<div className="mt-[30px]">
-						<Input />
+						{/* <Input /> */}
 					</div>
 					<div className="mt-[10px] mb-[20px]">
-						<Input />
+						{/* <Input /> */}
 					</div>
 					<Link
 						href={"/dashboard"}

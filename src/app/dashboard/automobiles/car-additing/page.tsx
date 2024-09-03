@@ -14,57 +14,57 @@ export default function Page() {
 						Make
 					</p>
 					<div className="col-span-2">
-						<Input />
+						{/* <Input /> */}
 					</div>
 					<p className="text-[20px] font-medium">
 						Model
 					</p>
 					<div className="col-span-2">
-						<Input />
+						{/* <Input /> */}
 					</div>
 					<p className="text-[20px] font-medium">
 						Fuel
 					</p>
 					<div className="col-span-2">
-						<Input />
+						{/* <Input /> */}
 					</div>
 					<p className="text-[20px] font-medium">
 						Power
 					</p>
 					<div className="col-span-2">
-						<Input />
+						{/* <Input /> */}
 					</div>
 					<p className="text-[20px] font-medium">
 						Powertrain
 					</p>
 					<div className="col-span-2">
-						<Input />
+						{/* <Input /> */}
 					</div>
 					<p className="text-[20px] font-medium">
 						Category
 					</p>
 					<div className="col-span-2">
-						<Input />
+						{/* <Input /> */}
 					</div>
 					<p className="text-[20px] font-medium">
 						Description
 					</p>
 					<div className="col-span-2">
+						{/* <Input />
 						<Input />
-						<Input />
-						<Input />
+						<Input /> */}
 					</div>
 					<p className="text-[20px] font-medium">
 						Price
 					</p>
 					<div className="col-span-2">
-						<Input />
+						{/* <Input /> */}
 					</div>
 					<p className="text-[20px] font-medium">
 						Image
 					</p>
 					<div className="col-span-2">
-						<Input />
+						{/* <Input /> */}
 					</div>
 				</div>
 			</div>
