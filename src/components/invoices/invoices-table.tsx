@@ -12,10 +12,10 @@ export default async function InvoicesTable({
 	cars: Model[]
 }) {
 
-	const test = invoices.map((inv) => {
-		return cars.filter((car) => car.carid === inv.carid)
-		// return 123
-	})
+	// const test = invoices.map((inv) => {
+	// 	return cars.filter((car) => car.carid === inv.carid)
+	// 	// return 123
+	// })
 
 	// console.log(`test: ${test}`);
 
