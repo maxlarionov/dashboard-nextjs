@@ -1,7 +1,7 @@
 "use client"
 
 import { Make, Model } from "@/app/lib/definitions";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import DefaultButton from "../defualt-button";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Select from "../select";
@@ -18,9 +18,6 @@ export default function SelectCar({
 	const [selectedMake, setSelectedMake] = useState<string>("Any make")
 	const [selectedModel, setSelectedModel] = useState<string>("Any model")
 	const [models, setModels] = useState<string[]>([])
-
-
-
 
 	const chooseMake = selectedMake === "Any make"
 	const searchParams = useSearchParams()

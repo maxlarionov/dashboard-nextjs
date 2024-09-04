@@ -10,6 +10,8 @@ export type TInvoicesTable = {
 	email?: string
 	city?: string
 	new?: boolean
+	make?: string
+	model?: string
 }
 
 

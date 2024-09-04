@@ -1,34 +1,40 @@
 "use client"
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import Image from "next/image";
 import DefaultButton from "./defualt-button";
-import Select from "./select";
-import Input from "./input";
 import { useState } from "react";
-import { Make } from "@/app/lib/definitions";
+import { Customer, Model } from '@/app/lib/definitions';
+import CarOrdering from './car-ordering';
+import CarDescription from './car-description';
+import { usePathname } from 'next/navigation';
 
 interface ChildProps {
 	openModal: () => void;
+	setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+	refresh: boolean
 }
 
 export default function ModalContainer({
-	modalName, children
+	modalName, options, filteredCustomers, screen
 }: {
 	// formAction: () => void;
 	modalName: string;
-	children: React.ReactElement<ChildProps> | React.ReactElement<ChildProps>[];
+	// children: React.ReactElement<ChildProps> | React.ReactElement<ChildProps>[];
+	options: Model[]
+	filteredCustomers: Customer[]
+	screen: string
 }) {
-	const handleSubmit = (event: React.FormEvent) => {
-		event.preventDefault()
-		// formAction()
-	}
-
 	const [isModalOpen, setIsModalOpen] = useState(false)
+	const [refresh, setRefresh] = useState(true)
+	const [currentScreen, setCurrentScreen] = useState("first")
+	const pathname = usePathname()
 
 	const openModal = () => {
 		setIsModalOpen(!isModalOpen)
+		setRefresh(!refresh)
+		if (pathname.includes('automobiles') === true)
+			setCurrentScreen("first")
 	}
 
 	const handleParentClick = (event: React.MouseEvent) => {
@@ -38,27 +44,60 @@ export default function ModalContainer({
 		}
 	};
 
-	const clonedChildren = React.Children.map(children, (child) => {
-		if (React.isValidElement(child)) {
-			return React.cloneElement(child, { openModal });
-		}
-		return child;
-	});
+	useEffect(() => {
+		setCurrentScreen(screen)
+	}, [])
+
+	// const clonedChildren = React.Children.map(children, (child) => {
+	// 	if (React.isValidElement(child)) {
+	// 		return React.cloneElement(child, { setIsModalOpen, refresh });
+	// 	}
+	// 	return child;
+	// });
+
+	// useEffect(() => {
+	// 	const handleClick = (event) => {
+	// 		console.log(event.target.name);
+	// 		if (event.target.name === "first") {
+	// 			""
+	// 		} else {
+	// 			""
+	// 		}
+	// 	};
+
+	// 	const modalButtons = document.querySelectorAll(".modal_button");
+
+	// 	modalButtons.forEach((button) => {
+	// 		button.addEventListener('click', handleClick);
+	// 	});
+
+	// 	return () => {
+	// 		modalButtons.forEach((button) => {
+	// 			button.removeEventListener('click', handleClick);
+	// 		});
+	// 	};
+	// }, []);
+
 
 	return (
 		<>
 			<DefaultButton type={"button"} styleType={"add"} text={"+ Add Car"} onClickFunction={openModal} />
-			<form onSubmit={handleSubmit} className={`${isModalOpen === true ? "block" : "hidden"}`}>
+			<div className={`${isModalOpen === true ? "block" : "hidden"}`}>
 				<div className="bg-black/50 fixed w-screen inset-0 flex justify-center items-center" onClick={(e) => handleParentClick(e)}>
-					<div className="bg-dirt-blue p-[30px] w-[800px] modal-content">
+					<div className="bg-dirt-blue p-[30px] modal-content">
 						<div className="flex justify-between">
 							<h3 className="font-cond text-[24px]">{modalName}</h3>
 							<XMarkIcon className="w-[24px] cursor-pointer" onClick={openModal} />
 						</div>
-						{clonedChildren}
+						{/* {clonedChildren} */}
+						{currentScreen === "first" ? (
+							<CarDescription setCurrentScreen={setCurrentScreen} />
+						) : (
+							<CarOrdering options={options} filteredCustomers={filteredCustomers} refresh={refresh} setIsModalOpen={setIsModalOpen} setCurrentScreen={setCurrentScreen} />
+						)}
 					</div>
 				</div>
-			</form>
+			</div>
 		</>
 	)
 }

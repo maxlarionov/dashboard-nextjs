@@ -42,9 +42,7 @@ export default async function Page({
 				<div className="flex w-full gap-x-[20px]">
 					<Search placeholder={"Search invoices..."} />
 				</div>
-				<ModalContainer modalName={"Car Ordering"}>
-					<CarOrdering options={makeAndModels} filteredCustomers={filteredCustomers} />
-				</ModalContainer>
+				<ModalContainer modalName={"Car Ordering"} options={makeAndModels} filteredCustomers={filteredCustomers} screen={"second"} />
 			</div>
 			<div className="p-4 mt-[20px] bg-dirt-blue">
 				<InvoicesTable invoices={filteredInvoices} cars={makeAndModels} />

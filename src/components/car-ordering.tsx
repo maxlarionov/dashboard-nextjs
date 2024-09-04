@@ -1,7 +1,7 @@
 "use client"
 
 import { Customer, Model } from "@/app/lib/definitions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import SelectCar from "./automobiles/select-car";
@@ -12,11 +12,15 @@ import Input from "./input";
 export default function CarOrdering({
 	options,
 	filteredCustomers,
-	openModal
+	setIsModalOpen,
+	refresh,
+	setCurrentScreen
 }: {
 	options: Model[]
 	filteredCustomers: Customer[]
-	openModal?: () => void
+	setIsModalOpen?: React.Dispatch<React.SetStateAction<boolean>>
+	refresh?: boolean
+	setCurrentScreen: React.Dispatch<React.SetStateAction<string>>
 }) {
 	const searchParams = useSearchParams()
 	const pathname = usePathname()
@@ -29,18 +33,20 @@ export default function CarOrdering({
 	const [selectedCar, setSelectedCar] = useState<Model>({ make: "", model: "", price: 0, carid: "" })
 	const car = options.filter((car) => car.model === selectedCar.model)
 
+	useEffect(() => {
+		resetModal()
+	}, [refresh])
+
 	const resetModal = () => {
 		const params = new URLSearchParams(searchParams)
 		params.delete('customer')
+		replace(`${pathname}?${params.toString()}`)
 		setCustomerName("")
 		setCustomerEmail("")
 		setCustomerCity("")
 		setCurrentCustomer("")
 		setSelectedCar({ make: "", model: "", price: 0, carid: "" })
-		if (openModal)
-			openModal()
 		console.log(999);
-
 	}
 
 	const handleSearch = useDebouncedCallback((term) => {
@@ -78,9 +84,13 @@ export default function CarOrdering({
 	const handleClickTooltip = (e: React.MouseEvent<HTMLDivElement>) => {
 		e.preventDefault()
 	}
+	const params = new URLSearchParams(searchParams)
+	console.log(`WHAT?: ${pathname}?${params.toString()}`);
+
 
 	const order = async () => {
 		try {
+
 			if (currentCustomer !== "") {
 				const customerData = filteredCustomers.filter((customer) => customer.name === currentCustomer)
 				const customerId = customerData[0].id
@@ -92,15 +102,19 @@ export default function CarOrdering({
 
 				await createInvoice({ customerId, customerCar, customerCarAmount, newCustomer: false })
 					.then(() => {
-						resetModal();
-						console.log('11 Invoice created successfully');
+						if (setIsModalOpen)
+							setIsModalOpen(false)
+						resetModal()
+						if (pathname.includes('automobiles') === true)
+							setCurrentScreen("first")
+						console.log('11 Invoice created successfully')
 					})
 					.catch((error) => {
-						console.error('11 Error creating invoice:', error);
+						console.error('11 Error creating invoice:', error)
 					});
 
 			} else {
-				console.log(2);
+				console.log(2)
 
 				const car = options.filter((car) => car.model === selectedCar.model)
 				const customerCar = car[0].carid
@@ -110,20 +124,24 @@ export default function CarOrdering({
 
 				await createInvoice({ customerName, customerEmail, customerCity, customerCar, customerCarAmount, newCustomer: true })
 					.then(() => {
-						resetModal();
-						console.log('22 Invoice created successfully');
+						if (setIsModalOpen)
+							setIsModalOpen(false)
+						resetModal()
+						if (pathname.includes('automobiles') === true)
+							setCurrentScreen("first")
+						console.log('22 Invoice created successfully')
 					})
 					.catch((error) => {
-						console.error('22 Error creating invoice:', error);
-					});
+						console.error('22 Error creating invoice:', error)
+					})
 			}
 		} catch (error) {
-			console.error("Error:", error);
+			console.error("Error:", error)
 		}
 	};
 
 	return (
-		<div className="mt-[20px]">
+		<div className="mt-[20px] w-[740px]">
 			<div>
 				<p className="font-cond text-[20px]">Car</p>
 				<div className="flex bg-black gap-[15px] p-[15px] mt-[10px] max-w-[385px]">

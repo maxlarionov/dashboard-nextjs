@@ -31,17 +31,21 @@ export async function getCurrentInvoices(
         pga_invoices.carid,
         pga_customers.name,
         pga_customers.email,
-        pga_customers.city
+        pga_customers.city,
+				pga_cars.model,
+    		pga_cars.make
       FROM pga_invoices
       JOIN pga_customers ON pga_invoices.customerid = pga_customers.id
+			JOIN pga_cars ON pga_invoices.carid = pga_cars.carid
       WHERE
         pga_customers.name ILIKE ${`%${query}%`} OR
         pga_customers.email ILIKE ${`%${query}%`} OR
         pga_customers.city ILIKE ${`%${query}%`} OR
         pga_invoices.amount::text ILIKE ${`%${query}%`} OR
         pga_invoices.date::text ILIKE ${`%${query}%`} OR
-        pga_invoices.carid::text ILIKE ${`%${query}%`} OR
-        pga_invoices.status ILIKE ${`%${query}%`}
+        pga_invoices.status ILIKE ${`%${query}%`} OR
+				pga_cars.model ILIKE ${`%${query}%`} OR
+    		pga_cars.make ILIKE ${`%${query}%`}
       ORDER BY pga_invoices.date DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
