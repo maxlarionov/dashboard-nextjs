@@ -1,4 +1,6 @@
 
+"use server"
+
 import { Customer, TInvoicesTable } from '@/app/lib/definitions';
 import { sql } from '@vercel/postgres';
 import { log } from 'console';
@@ -11,69 +13,6 @@ const FormSchema = z.object({
 	status: z.enum(['pending', 'paid']),
 	date: z.string(),
 })
-
-const CreateInvoice = FormSchema.omit({ id: true, date: true })
-
-export async function createInvoice({
-	customerId,
-	customerName,
-	customerCar,
-	customerCarAmount,
-	customerEmail,
-	customerCity,
-	newCustomer
-}: {
-	customerId?: string
-	customerName?: string
-	customerCar: string
-	customerCarAmount: number
-	customerEmail?: string
-	customerCity?: string
-	newCustomer: boolean
-}) {
-
-
-	const date = new Date().toISOString().split('T')[0]
-
-	try {
-		if (newCustomer === true) {
-			await sql`
-      INSERT INTO pga_customers (name, email, city)
-      VALUES (${customerName}, ${customerEmail}, ${customerCity})
-			`
-			const customer = await sql`
-			SELECT 
-				pga_customers.id
-			FROM pga_customers
-			WHERE pga_customers.name = ${customerName}
-			`
-
-			const customerid = customer.rows[0]
-			console.log(customerid, customerid.id)
-
-			await sql`
-      INSERT INTO pga_invoices (customerid, carid, amount, status, date)
-      VALUES (${customerid.id}, ${customerCar}, ${customerCarAmount}, 'prnding', ${date})
-    	`
-		} else {
-
-			console.log({ customerId, customerCar, customerCarAmount, status: 'pending', date });
-
-			await sql`
-  	  INSERT INTO pga_invoices (customerid, carid, amount, status, date)
-      VALUES (${customerId}, ${customerCar}, ${customerCarAmount}, 'pending', ${date})
-			
-    `
-		}
-		// INSERT INTO pga_invoices (customerid, carid, amount, status, date)
-		// VALUES ('3958dc9e-712f-4377-85e9-fec4b6a6442a', '9f3c794a-7296-4320-a05a-69f960321fef', 12311, 'Pending', '2024-09-03')
-
-	} catch (error) {
-		return {
-			message: 'Database Error: Failed to Create Invoice.',
-		}
-	}
-}
 
 const ITEMS_PER_PAGE = 6;
 export async function getCurrentInvoices(

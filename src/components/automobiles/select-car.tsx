@@ -34,7 +34,7 @@ export default function SelectCar({
 			.filter((car) => car.make === make)
 			.map((car) => car.model)
 
-		console.log(filteredModels)
+		// console.log(filteredModels)
 
 		setModels(filteredModels)
 		setSelectedModel("Any model")

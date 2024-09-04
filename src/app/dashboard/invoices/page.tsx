@@ -29,7 +29,7 @@ export default async function Page({
 	const allInvoicesPages = await getAllInvoicesPages(query) || 1
 	const filteredCustomers = await getCurrentCustomers(currentCustomer)
 
-	console.log(filteredCustomers)
+	// console.log(filteredCustomers)
 
 
 	return (
