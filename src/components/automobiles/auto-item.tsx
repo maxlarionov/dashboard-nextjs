@@ -1,9 +1,22 @@
+"use client"
+
 import { Car } from "@/app/lib/definitions";
 import Image from "next/image";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function AutoItem({ car }: { car: Car }) {
+	const searchParams = useSearchParams()
+	const pathname = usePathname()
+	const { replace } = useRouter()
+
+	const openCarModal = () => {
+		const params = new URLSearchParams(searchParams)
+		params.set('car', car.carid)
+		replace(`${pathname}?${params.toString()}`)
+	}
+
 	return (
-		<div className="flex w-[480px] h-[186px] border-solid border-[3px] border-dirt-blue">
+		<div className="flex w-[480px] h-[186px] border-solid border-[3px] border-dirt-blue cursor-pointer hover:bg-hover-blue" onClick={openCarModal}>
 			<Image
 				src={car.image}
 				width={240}

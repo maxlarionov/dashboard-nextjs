@@ -9,11 +9,13 @@ import Select from "../select";
 export default function SelectCar({
 	options,
 	isSearch,
-	setSelectedCar
+	setSelectedCar,
+	orderedCarId
 }: {
 	options: Model[]
 	isSearch: boolean
 	setSelectedCar?: Dispatch<SetStateAction<Model>>
+	orderedCarId?: string | null
 }) {
 	const [selectedMake, setSelectedMake] = useState<string>("Any make")
 	const [selectedModel, setSelectedModel] = useState<string>("Any model")
@@ -67,11 +69,27 @@ export default function SelectCar({
 	}
 
 	const uniqueMakes = Array.from(new Set(options.map((car) => car.make)))
+	const orderedCar = options.find((car) => car.carid === orderedCarId)
+
+
+	const defaultOrderedCar = () => {
+		if (setSelectedCar && orderedCar) {
+			const car = { make: orderedCar.make, model: orderedCar?.model, price: 0, carid: "" }
+			setSelectedCar(car)
+		}
+	}
+
+	useEffect(() => {
+		if (orderedCarId) {
+			defaultOrderedCar()
+		}
+	}, [orderedCarId])
+
 
 	return (
 		<>
-			<Select value={selectedMake} name={"make"} options={uniqueMakes} onChange={handleMakeChange} />
-			<Select value={selectedModel} name={"model"} options={models} onChange={handleModelChange} disabled={chooseMake} />
+			<Select value={selectedMake} name={"make"} options={uniqueMakes} orderedOptions={orderedCar?.make} onChange={handleMakeChange} />
+			<Select value={selectedModel} name={"model"} options={models} orderedOptions={orderedCar?.model} onChange={handleModelChange} disabled={chooseMake} />
 			{isSearch === true && (
 				<DefaultButton type="button" styleType="default" onClickFunction={handleSearch} text={"Search"} />
 			)}

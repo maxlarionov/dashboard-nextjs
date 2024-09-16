@@ -4,19 +4,19 @@ import React, { useEffect } from 'react'
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import DefaultButton from "./defualt-button";
 import { useState } from "react";
-import { Customer, Model } from '@/app/lib/definitions';
+import { Car, Customer, Model } from '@/app/lib/definitions';
 import CarOrdering from './car-ordering';
 import CarDescription from './car-description';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
-interface ChildProps {
-	openModal: () => void;
-	setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-	refresh: boolean
-}
+// interface ChildProps {
+// 	openModal: () => void;
+// 	setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+// 	refresh: boolean
+// }
 
 export default function ModalContainer({
-	modalName, options, filteredCustomers, screen
+	modalName, options, filteredCustomers, screen, cars
 }: {
 	// formAction: () => void;
 	modalName: string;
@@ -24,15 +24,35 @@ export default function ModalContainer({
 	options: Model[]
 	filteredCustomers: Customer[]
 	screen: string
+	cars?: Car[] | null
 }) {
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [refresh, setRefresh] = useState(true)
 	const [currentScreen, setCurrentScreen] = useState("first")
+	const searchParams = useSearchParams()
 	const pathname = usePathname()
 
+	useEffect(() => {
+		const carParam = searchParams.get('car') // Отримуємо параметр 'car' з URL
+		const customerParam = searchParams.get('customer') // Отримуємо параметр 'customer' з URL
+		if (carParam && !customerParam) {
+			openModal(); // Якщо параметр 'car' існує, відкриваємо модалку
+		}
+	}, [searchParams]); // Слідкуємо за змінами в searchParams
+
 	const openModal = () => {
-		setIsModalOpen(!isModalOpen)
-		setRefresh(!refresh)
+		setIsModalOpen(true)
+		setRefresh(false)
+		console.log(refresh)
+		if (pathname.includes('automobiles') === true)
+			setCurrentScreen("first")
+	}
+
+	const closeModal = () => {
+		setIsModalOpen(false)
+		setRefresh(true)
+		console.log(refresh)
+
 		if (pathname.includes('automobiles') === true)
 			setCurrentScreen("first")
 	}
@@ -40,13 +60,13 @@ export default function ModalContainer({
 	const handleParentClick = (event: React.MouseEvent) => {
 		const target = event.target as HTMLElement
 		if (!target.closest('.modal-content')) { // Перевірка чи клік відбувся поза межами модального вікна
-			openModal()
+			closeModal()
 		}
 	};
 
 	useEffect(() => {
 		setCurrentScreen(screen)
-	}, [])
+	}, [screen])
 
 	// const clonedChildren = React.Children.map(children, (child) => {
 	// 	if (React.isValidElement(child)) {
@@ -87,11 +107,11 @@ export default function ModalContainer({
 					<div className="bg-dirt-blue p-[30px] modal-content">
 						<div className="flex justify-between">
 							<h3 className="font-cond text-[24px]">{modalName}</h3>
-							<XMarkIcon className="w-[24px] cursor-pointer" onClick={openModal} />
+							<XMarkIcon className="w-[24px] cursor-pointer" onClick={closeModal} />
 						</div>
 						{/* {clonedChildren} */}
 						{currentScreen === "first" ? (
-							<CarDescription setCurrentScreen={setCurrentScreen} />
+							<CarDescription setCurrentScreen={setCurrentScreen} options={options} cars={cars} refresh={refresh} />
 						) : (
 							<CarOrdering options={options} filteredCustomers={filteredCustomers} refresh={refresh} setIsModalOpen={setIsModalOpen} setCurrentScreen={setCurrentScreen} />
 						)}

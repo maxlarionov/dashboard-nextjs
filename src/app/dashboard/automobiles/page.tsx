@@ -14,11 +14,13 @@ export default async function Page({
 		query?: string;
 		page?: string;
 		customer?: string;
+		car?: string;
 	};
 }) {
 	const query = searchParams?.query || ""
 	const currentPage = Number(searchParams?.page) || 1
 	const currentCustomer = searchParams?.customer || ""
+	const currentCar = searchParams?.car || ""
 	const makeAndModels = await getCarsMakeAndModels()
 	const filteredCars = await getCurrentCars(query, currentPage)
 	const allCarsPages = await getAllCarsPages(query) || 1
@@ -37,7 +39,7 @@ export default async function Page({
 				<div className="flex w-full gap-x-[20px]">
 					<SelectCar options={makeAndModels} isSearch={true} />
 				</div>
-				<ModalContainer modalName={"Car Ordering"} options={makeAndModels} filteredCustomers={filteredCustomers} screen={"first"} />
+				<ModalContainer modalName={"Car Ordering"} options={makeAndModels} filteredCustomers={filteredCustomers} screen={"first"} cars={filteredCars} />
 				{/* <ModalContainer modalName={"Car Desctiption"}>
 					<CarDescription />
 					<CarOrdering options={makeAndModels} filteredCustomers={filteredCustomers} />

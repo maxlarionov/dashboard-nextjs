@@ -34,12 +34,16 @@ export default function CarOrdering({
 	const car = options.filter((car) => car.model === selectedCar.model)
 
 	useEffect(() => {
-		resetModal()
+		if (refresh === true)
+			resetModal()
+		console.log('reset2');
+
 	}, [refresh])
 
 	const resetModal = () => {
 		const params = new URLSearchParams(searchParams)
 		params.delete('customer')
+		params.delete('car')
 		replace(`${pathname}?${params.toString()}`)
 		setCustomerName("")
 		setCustomerEmail("")
@@ -48,6 +52,9 @@ export default function CarOrdering({
 		setSelectedCar({ make: "", model: "", price: 0, carid: "" })
 		console.log(999);
 	}
+
+
+	const orderedCarId = searchParams.get('car')
 
 	const handleSearch = useDebouncedCallback((term) => {
 		setCustomersModal(true)
@@ -95,6 +102,8 @@ export default function CarOrdering({
 				const customerData = filteredCustomers.filter((customer) => customer.name === currentCustomer)
 				const customerId = customerData[0].id
 				const car = options.filter((car) => car.model === selectedCar.model)
+				console.log(selectedCar)
+
 				const customerCar = car[0].carid
 				const customerCarAmount = car[0].price
 
@@ -145,7 +154,7 @@ export default function CarOrdering({
 			<div>
 				<p className="font-cond text-[20px]">Car</p>
 				<div className="flex bg-black gap-[15px] p-[15px] mt-[10px] max-w-[385px]">
-					<SelectCar options={options} isSearch={false} setSelectedCar={setSelectedCar} />
+					<SelectCar options={options} isSearch={false} setSelectedCar={setSelectedCar} orderedCarId={orderedCarId} />
 				</div>
 			</div>
 			<div className="mt-[20px]">
